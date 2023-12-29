@@ -3,6 +3,8 @@
 #### Resources:
 - wandb Documentation: [https://docs.wandb.ai/]
 - for lightning: [https://docs.wandb.ai/tutorials/lightning]
+- for lightning-integration: [https://docs.wandb.ai/guides/integrations/lightning]
+- wandb + lightning examples: [https://github.com/wandb/examples/tree/master/colabs/pytorch-lightning]
 
 
 #### Video resources:
