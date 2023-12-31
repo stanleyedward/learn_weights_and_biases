@@ -4,7 +4,7 @@ NUM_CLASSES = 10
 LEARNING_RATE = 2e-4
 BATCH_SIZE = 32
 MIN_NUM_EPOCHS = 1
-MAX_NUM_EPOCHS = 2
+MAX_NUM_EPOCHS = 5
 
 # Logging
 LOGS_DIR = "1. Image Classification/logs/"

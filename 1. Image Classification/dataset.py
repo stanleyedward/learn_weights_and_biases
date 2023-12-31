@@ -35,14 +35,14 @@ class CIFAR10DataModule(L.LightningDataModule):
                 lengths=[45000, 5000],
                 generator=torch.Generator().manual_seed(42),
             )
-        if stage == "test":
+        if stage == "test" or stage is None:
             self.test_dataset = CIFAR10(
-                root=self.data_dir, train=False, transform=self.transform
+                root=self.data_dir, train=False, download=False, transform=self.transform
             )
 
-        if stage == "predict":
+        if stage == "predict" or stage is None:
             self.test_dataset = CIFAR10(
-                root=self.data_dir, train=False, transform=self.transform
+                root=self.data_dir, train=False, download=False, transform=self.transform
             )
 
     def train_dataloader(self):
