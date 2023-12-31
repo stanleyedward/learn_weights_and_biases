@@ -7,7 +7,7 @@ from torchmetrics import Accuracy
 
 class LitModel(L.LightningModule):
     def __init__(self, input_shape, num_classes, learning_rate):
-        super().__init()
+        super().__init__()
         # Log hyperparameters()
         self.save_hyperparameters()
         self.learning_rate = learning_rate

@@ -7,7 +7,7 @@ import wandb
 class ImagePredictionLogger(Callback):
     def __init__(self, val_samples, num_samples=32):
         super().__init__()
-        self.num_samples = (num_samples,)
+        self.num_samples = num_samples
         self.val_imgs, self.val_labels = val_samples
 
     def on_validation_epoch_end(self, trainer: L.Trainer, pl_module: L.LightningModule):

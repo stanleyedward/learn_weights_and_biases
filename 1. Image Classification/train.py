@@ -1,4 +1,4 @@
-import lightning.pytorch as L
+import lightning as L
 from lightning.pytorch.loggers import WandbLogger
 import wandb
 from dataset import CIFAR10DataModule
