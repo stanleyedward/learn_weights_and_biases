@@ -20,7 +20,11 @@ val_samples = next(iter(datamodule.val_dataloader()))
 val_imgs, val_labels = val_samples[0], val_samples[1]
 print(f"val img shape: {val_imgs.shape}, val_label_shape: {val_labels.shape}")
 
-model = LitModel(input_shape=config.INPUT_SHAPE, num_classes=datamodule.num_classes, learning_rate=config.LEARNING_RATE)
+model = LitModel(
+    input_shape=config.INPUT_SHAPE,
+    num_classes=datamodule.num_classes,
+    learning_rate=config.LEARNING_RATE,
+)
 
 # initialize the wandb logger
 wandb_logger = WandbLogger(
