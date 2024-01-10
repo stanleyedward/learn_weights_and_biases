@@ -16,7 +16,7 @@ datamodule.setup()
 
 # initialize model
 model = MNIST_LitModule(
-    n_layer_1=config.H_LAYER_1, n_layer_2=config.H_LAYER_2, num_classes=datamodule.num_classes, learning_rate=config.LEARNING_RATE
+    h_layer_1=config.H_LAYER_1, h_layer_2=config.H_LAYER_2, num_classes=datamodule.num_classes, learning_rate=config.LEARNING_RATE
 )
 
 # initialize wandb logger
