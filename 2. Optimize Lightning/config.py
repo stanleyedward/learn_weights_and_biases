@@ -1,3 +1,5 @@
+import os
+import torch
 # Training Hyperparams
 H_LAYER_1 = 128
 H_LAYER_2 = 256
@@ -12,11 +14,11 @@ LOGS_DIR = "2. Optimize Lightning/logs/"
 
 # Dataset
 DATA_DIR = "2. Optimize Lightning/dataset/"
-NUM_WORKERS = 6
+NUM_WORKERS = os.cpu_count()
 
 # Compute relatied
 PROFILER = None
 ACCELERATOR = "gpu"
-DEVICES = [0]
+DEVICES = int(torch.cuda.is_available())
 PRECISION = "16-mixed"
 STRATEGY = "auto"
