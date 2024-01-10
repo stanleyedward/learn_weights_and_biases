@@ -7,7 +7,7 @@ from lightning.pytorch.loggers import WandbLogger
 
 
 class MyPrintingCallback(Callback):
-    def __init(self):
+    def __init__(self):
         super().__init__()
 
     def on_train_start(self, trainer: L.Trainer, pl_module: L.LightningModule):
@@ -17,6 +17,9 @@ class MyPrintingCallback(Callback):
         print("Training is done.")
         
 class LogPredictionsCallback(Callback):
+    def __init__(self, wandb_logger: WandbLogger):
+        super().__init__()
+        self.wandb_logger = wandb_logger
     
     def on_validation_batch_end(self, trainer: L.Trainer, pl_module: L.LightningModule,
                                 outputs, batch, batch_idx, wandb_logger: WandbLogger):
@@ -33,10 +36,10 @@ class LogPredictionsCallback(Callback):
             captions = [f'Ground Truth: {y_i} - Prediction: {y_pred}' for y_i, y_pred in zip(y[:n], outputs[:n])]
             
             #option 1:log iamges iwth wandblogger.log_image'
-            wandb_logger.log_image(key='sample_images', images=images, captions=captions)
+            self.wandb_logger.log_image(key='sample_images', images=images, captions=captions)
             
             #option 2: log predictions as a table
             columns = ['image', 'ground_truth', 'prediction']
             data = [[wandb.Image(x_i), y_i, y_pred] for x_i, y_i, y_pred in list(zip(x[:n], y[:n], outputs[:n]))]
-            wandb_logger.log_table(key='sample_table', columns=columns, data=data)
+            self.wandb_logger.log_table(key='sample_table', columns=columns, data=data)
             
