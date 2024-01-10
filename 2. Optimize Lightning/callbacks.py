@@ -15,31 +15,45 @@ class MyPrintingCallback(Callback):
 
     def on_train_end(self, trainer: L.Trainer, pl_module: L.LightningModule):
         print("Training is done.")
-        
+
+
 class LogPredictionsCallback(Callback):
     def __init__(self, wandb_logger: WandbLogger):
         super().__init__()
         self.wandb_logger = wandb_logger
-    
-    def on_validation_batch_end(self, trainer: L.Trainer, pl_module: L.LightningModule,
-                                outputs, batch, batch_idx):
-        '''called when the validation batch ends.'''
-        
+
+    def on_validation_batch_end(
+        self,
+        trainer: L.Trainer,
+        pl_module: L.LightningModule,
+        outputs,
+        batch,
+        batch_idx,
+    ):
+        """called when the validation batch ends."""
+
         #'outputs' comes from 'LightningModule.validation_step'
-        #which corresponds to urmodel preds from first batch
-        
-        #lets log 20 samples image preds from first batch
+        # which corresponds to urmodel preds from first batch
+
+        # lets log 20 samples image preds from first batch
         if batch_idx == 20:
             n = 20
             x, y = batch
             images = [img for img in x[:n]]
-            captions = [f'Ground Truth: {y_i} - Prediction: {y_pred}' for y_i, y_pred in zip(y[:n], outputs[:n])]
-            
-            #option 1:log iamges iwth wandblogger.log_image'
-            self.wandb_logger.log_image(key='sample_images', images=images, caption=captions)
-            
-            #option 2: log predictions as a table
-            columns = ['image', 'ground_truth', 'prediction']
-            data = [[wandb.Image(x_i), y_i, y_pred] for x_i, y_i, y_pred in list(zip(x[:n], y[:n], outputs[:n]))]
-            self.wandb_logger.log_table(key='sample_table', columns=columns, data=data)
-            
+            captions = [
+                f"Ground Truth: {y_i} - Prediction: {y_pred}"
+                for y_i, y_pred in zip(y[:n], outputs[:n])
+            ]
+
+            # option 1:log iamges iwth wandblogger.log_image'
+            self.wandb_logger.log_image(
+                key="sample_images", images=images, caption=captions
+            )
+
+            # option 2: log predictions as a table
+            columns = ["image", "ground_truth", "prediction"]
+            data = [
+                [wandb.Image(x_i), y_i, y_pred]
+                for x_i, y_i, y_pred in list(zip(x[:n], y[:n], outputs[:n]))
+            ]
+            self.wandb_logger.log_table(key="sample_table", columns=columns, data=data)

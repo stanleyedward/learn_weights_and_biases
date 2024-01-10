@@ -15,7 +15,7 @@ class MNIST_LitModule(L.LightningModule):
         n_layer_2: int = 256,
         learning_rate=1e-3,
     ):
-        '''method used to define our model parameters'''
+        """method used to define our model parameters"""
         super().__init__()
 
         self.save_hyperparameters()
@@ -82,5 +82,3 @@ class MNIST_LitModule(L.LightningModule):
         acc = accuracy(preds=preds, target=y, task="multiclass", num_classes=10)
 
         return preds, loss, acc
-    
-    
