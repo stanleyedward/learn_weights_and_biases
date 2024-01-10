@@ -51,7 +51,7 @@ trainer = L.Trainer(
     precision=config.PRECISION,
     strategy=config.STRATEGY,
     profiler=config.PROFILER,
-    fast_dev_run=False
+    fast_dev_run=False,
 )
 
 # train the model

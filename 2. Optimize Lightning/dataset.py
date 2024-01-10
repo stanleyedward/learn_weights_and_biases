@@ -1,54 +1,53 @@
-import lightning.pytorch as L
-import torch
-from torch.utils.data import random_split, DataLoader
+from lightning.pytorch.utilities.types import EVAL_DATALOADERS, TRAIN_DATALOADERS
+from torchvision.datasets import MNIST
 from torchvision import transforms
-from torchvision.datasets import CIFAR10
+from torch.utils.data import DataLoader, random_split
+import torch
+import lightning as L
 
 
-class CIFAR10DataModule(L.LightningDataModule):
+class MNISTDataModule(L.LightningDataModule):
     def __init__(self, batch_size: int, data_dir: str, num_workers: int):
         super().__init__()
         self.batch_size = batch_size
         self.data_dir = data_dir
         self.num_workers = num_workers
 
-        self.transform = transforms.Compose(
-            [
-                transforms.ToTensor(),
-                transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
-            ]
-        )
-
         self.num_classes = 10
 
-    def prepare_data(self):
-        CIFAR10(root=self.data_dir, train=True, download=True)
-        CIFAR10(root=self.data_dir, train=False, download=True)
+        self.transform = transforms.Compose(
+            [transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))]
+        )
 
-    def setup(self, stage=None):
-        if stage == "fit" or stage is None:
-            entire_dataset = CIFAR10(
-                root=self.data_dir, train=True, download=False, transform=self.transform
+    def prepare_data(self):
+        MNIST(root=self.data_dir, train=True, download=True)
+        MNIST(root=self.data_dir, train=False, download=True)
+
+    def setup(self, stage: str):
+        if stage == "fit" or None:
+            entire_dataset = MNIST(
+                root=self.data_dir, train=True, transform=self.transform, download=False
             )
             self.train_dataset, self.val_dataset = random_split(
                 dataset=entire_dataset,
-                lengths=[45000, 5000],
+                lengths=[55000, 5000],
                 generator=torch.Generator().manual_seed(42),
             )
-        if stage == "test" or stage is None:
-            self.test_dataset = CIFAR10(
+
+        if stage == "test" or None:
+            self.test_dataset = MNIST(
                 root=self.data_dir,
                 train=False,
-                download=False,
                 transform=self.transform,
+                download=False,
             )
 
-        if stage == "predict" or stage is None:
-            self.test_dataset = CIFAR10(
+        if stage == "predict" or None:
+            self.test_dataset = MNIST(
                 root=self.data_dir,
                 train=False,
-                download=False,
                 transform=self.transform,
+                download=False,
             )
 
     def train_dataloader(self):
