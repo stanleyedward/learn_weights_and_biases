@@ -32,6 +32,7 @@ log_predictions_callback = LogPredictionsCallback(wandb_logger=wandb_logger)
 
 #initialize trainer
 trainer = L.Trainer(
+    logger=wandb_logger,
     min_epochs=1,
     max_epochs=5,
     accelerator='gpu',

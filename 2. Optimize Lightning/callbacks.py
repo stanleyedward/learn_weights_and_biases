@@ -36,7 +36,7 @@ class LogPredictionsCallback(Callback):
             captions = [f'Ground Truth: {y_i} - Prediction: {y_pred}' for y_i, y_pred in zip(y[:n], outputs[:n])]
             
             #option 1:log iamges iwth wandblogger.log_image'
-            self.wandb_logger.log_image(key='sample_images', images=images, captions=captions)
+            self.wandb_logger.log_image(key='sample_images', images=images, caption=captions)
             
             #option 2: log predictions as a table
             columns = ['image', 'ground_truth', 'prediction']
