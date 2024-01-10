@@ -22,7 +22,7 @@ class LogPredictionsCallback(Callback):
         self.wandb_logger = wandb_logger
     
     def on_validation_batch_end(self, trainer: L.Trainer, pl_module: L.LightningModule,
-                                outputs, batch, batch_idx, wandb_logger: WandbLogger):
+                                outputs, batch, batch_idx):
         '''called when the validation batch ends.'''
         
         #'outputs' comes from 'LightningModule.validation_step'

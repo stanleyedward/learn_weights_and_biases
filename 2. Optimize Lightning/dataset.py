@@ -23,7 +23,7 @@ class MNISTDataModule(L.LightningDataModule):
         MNIST(root=self.data_dir, train=True, download=True)
         MNIST(root=self.data_dir, train=False, download=True)
 
-    def setup(self, stage: str):
+    def setup(self, stage=None):
         if stage == "fit" or None:
             entire_dataset = MNIST(
                 root=self.data_dir, train=True, transform=self.transform, download=False

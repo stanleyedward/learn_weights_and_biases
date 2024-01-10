@@ -30,6 +30,7 @@ wandb_logger = WandbLogger(project='first-MNIST',
 checkpoint_callback = ModelCheckpoint(monitor='val_accuracy', mode='max')
 log_predictions_callback = LogPredictionsCallback(wandb_logger=wandb_logger)
 
+#initialize trainer
 trainer = L.Trainer(
     min_epochs=1,
     max_epochs=5,
