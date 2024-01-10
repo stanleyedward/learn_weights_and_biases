@@ -1,5 +1,3 @@
-from typing import Any
-from lightning.pytorch.utilities.types import STEP_OUTPUT, OptimizerLRScheduler
 import torch
 from torch.nn import Linear, CrossEntropyLoss, functional as F
 from torch.optim import Adam
@@ -11,8 +9,8 @@ class MNIST_LitModule(L.LightningModule):
     def __init__(
         self,
         num_classes: int = 10,
-        n_layer_1: int = 128,
-        n_layer_2: int = 256,
+        h_layer_1: int = 128,
+        h_layer_2: int = 256,
         learning_rate=1e-3,
     ):
         """method used to define our model parameters"""
@@ -22,16 +20,16 @@ class MNIST_LitModule(L.LightningModule):
         self.learning_rate = learning_rate
         self.loss = CrossEntropyLoss()
 
-        self.layer_1 = Linear(in_features=28 * 28, out_features=n_layer_1)
-        self.layer_2 = Linear(in_features=n_layer_1, out_features=n_layer_2)
-        self.layer_3 = Linear(in_features=n_layer_2, out_features=num_classes)
+        self.layer_1 = Linear(in_features=28 * 28, out_features=h_layer_1)
+        self.layer_2 = Linear(in_features=h_layer_1, out_features=h_layer_2)
+        self.layer_3 = Linear(in_features=h_layer_2, out_features=num_classes)
 
     def forward(self, x):
         """method used for inference input -> output"""
 
         batch_size, channels, width, height = x.size()
 
-        # (b, 1, 28, 28) -> (b, 1*28*28)
+        # (b, 1, 28, 28) -> (b, 1*28*28) #flattening
         x = x.view(batch_size, -1)
 
         # lets do a  3*(linear+relu)
