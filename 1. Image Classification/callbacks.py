@@ -33,7 +33,7 @@ class ImagePredictionLogger(Callback):
 
 
 class MyPrintingCallback(Callback):
-    def __init(self):
+    def __init__(self):
         super().__init__()
 
     def on_train_start(self, trainer: L.Trainer, pl_module: L.LightningModule) -> None:
