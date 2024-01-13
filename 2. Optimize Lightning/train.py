@@ -9,14 +9,19 @@ import config
 
 # initialize datamodule
 datamodule = MNISTDataModule(
-    batch_size=config.BATCH_SIZE, data_dir=config.DATA_DIR, num_workers=config.NUM_WORKERS
+    batch_size=config.BATCH_SIZE,
+    data_dir=config.DATA_DIR,
+    num_workers=config.NUM_WORKERS,
 )
 datamodule.prepare_data()
 datamodule.setup()
 
 # initialize model
 model = MNIST_LitModule(
-    h_layer_1=config.H_LAYER_1, h_layer_2=config.H_LAYER_2, num_classes=datamodule.num_classes, learning_rate=config.LEARNING_RATE
+    h_layer_1=config.H_LAYER_1,
+    h_layer_2=config.H_LAYER_2,
+    num_classes=datamodule.num_classes,
+    learning_rate=config.LEARNING_RATE,
 )
 
 # initialize wandb logger

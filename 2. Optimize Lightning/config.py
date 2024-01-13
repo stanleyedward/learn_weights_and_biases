@@ -1,5 +1,6 @@
 import os
 import torch
+
 # Training Hyperparams
 H_LAYER_1 = 128
 H_LAYER_2 = 256
