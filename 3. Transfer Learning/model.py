@@ -49,6 +49,8 @@ class LitModel(L.LightningModule):
         n_sizes = self._get_conv_output(shape=input_shape)
 
         self.classifier = nn.Linear(in_features=n_sizes, out_features=num_classes)
+        
+        self.test_step_outputs = []
 
     def _get_conv_output(self, shape):
         batch_size = 1
@@ -59,16 +61,18 @@ class LitModel(L.LightningModule):
         return n_size
 
     def _forward_features(self, x):
-        x = self.feature_extractor(x)
+        x = self.resnet18_model(x)
         return x
 
     def forward(self, x):
         x = self._forward_features(x)
         x = x.view(x.size(0), -1)
         x = self.classifier(x)
+        
+        return x
 
     def training_step(self, batch, batch_idx):
-        x, y = batch[0], batch[1]
+        x, y = batch
         out = self.forward(x)
         loss = self.loss(out, y)
         acc = self.accuracy(out, y)
@@ -79,7 +83,7 @@ class LitModel(L.LightningModule):
         return loss
 
     def validation_step(self, batch, batch_idx):
-        x, y = batch[0], batch[1]
+        x, y = batch
         out = self.forward(x)
         loss = self.loss(out, y)
         acc = self.accuracy(out, y)
@@ -90,17 +94,19 @@ class LitModel(L.LightningModule):
         return loss
 
     def test_step(self, batch, batch_idx):
-        x, y = batch[0], batch[1]
+        x, y = batch
         out = self.forward(x)
         loss = self.loss(out, y)
 
-        return {"loss": loss, "outputs": out, "y": y}
+        self.test_step_outputs.append({"loss": loss, "outputs": out, "y": y})
+    
+        return loss
 
-    def test_epoch_end(self, outputs):
-        loss = torch.stach([x["loss"] for x in outputs]).mean()
-        output = torch.cat([x["outputs"] for x in outputs], dim=0)
+    def on_test_epoch_end(self):
+        loss = torch.stack([x["loss"] for x in self.test_step_outputs]).mean()
+        output = torch.cat([x["outputs"] for x in self.test_step_outputs], dim=0)
 
-        y = torch.cat([x["y"] for x in outputs], dim=0)
+        y = torch.cat([x["y"] for x in self.test_step_outputs], dim=0)
 
         self.log("test/loss", loss)
         acc = self.accuracy(output, y)
@@ -108,6 +114,7 @@ class LitModel(L.LightningModule):
 
         self.test_y = y
         self.test_output = output
+        self.test_step_outputs.clear()
 
     def configure_optimizers(self):
         return torch.optim.Adam(self.parameters(), lr=self.learning_rate)

@@ -21,6 +21,7 @@ trainer = L.Trainer(
     ),
     max_epochs=10,
     accelerator="gpu",
+    fast_dev_run=False
 )
 trainer.fit(model, dm)
 trainer.test(model, dm)
