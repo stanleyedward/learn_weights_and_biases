@@ -9,7 +9,6 @@ class LitModel(L.LightningModule):
     def __init__(self, input_shape, num_classes, learning_rate):
         super().__init__()
         # Log hyperparameters()
-        self.save_hyperparameters()
         self.learning_rate = learning_rate
         self.accuracy = Accuracy(task="multiclass", num_classes=num_classes)
 
@@ -26,6 +25,7 @@ class LitModel(L.LightningModule):
         self.fc1 = nn.Linear(in_features=n_sizes, out_features=512)
         self.fc2 = nn.Linear(in_features=512, out_features=128)
         self.fc3 = nn.Linear(in_features=128, out_features=num_classes)
+        self.save_hyperparameters()
 
     # returns the size of the output tensor going into Linear layer form th conv block.
     def _get_conv_output(self, shape):
